@@ -39,7 +39,7 @@
     padding:24px;
   }
 
-  .app{width:min(920px,100%)}
+  .app{width:min(880px,100%)}
 
   .topbar{
     display:flex;
@@ -89,6 +89,11 @@
     background:linear-gradient(#49b66f,#2d7f4d);
     color:#f4fff7;
   }
+  .btn.warnbtn{
+    border-color:#b67c2f;
+    background:linear-gradient(#d39a43,#9a661f);
+    color:#fff9ef;
+  }
 
   .safe{
     border:2px solid #59636c;
@@ -111,14 +116,21 @@
   }
   .safe > *{position:relative;z-index:1}
 
-  .safe:before,.safe:after{
-    content:"";position:absolute;top:18px;width:20px;height:20px;border-radius:50%;
+  .safe:before,.safe:after,
+  .safe .bolt-bl,.safe .bolt-br{
+    content:"";
+    position:absolute;
+    width:20px;
+    height:20px;
+    border-radius:50%;
     background:radial-gradient(circle at 35% 35%,#aab2b8,#384048 45%,#111 48%);
-    box-shadow:0 calc(100vh - 160px) 0 #222;
     z-index:1;
+    box-shadow:0 2px 6px rgba(0,0,0,.5);
   }
-  .safe:before{left:18px}
-  .safe:after{right:18px}
+  .safe:before{top:18px;left:18px}
+  .safe:after{top:18px;right:18px}
+  .safe .bolt-bl{left:18px;bottom:18px}
+  .safe .bolt-br{right:18px;bottom:18px}
 
   .status-row{
     display:flex;
@@ -127,6 +139,7 @@
     gap:16px;
     margin-bottom:18px;
     flex-wrap:wrap;
+    padding: 4px 38px 0 38px;
   }
   .attempts{
     font-weight:800;
@@ -140,8 +153,8 @@
 
   .main-grid{
     display:grid;
-    grid-template-columns: 200px minmax(0,420px) 220px;
-    gap:18px;
+    grid-template-columns: 200px max-content 210px;
+    gap:16px;
     align-items:start;
   }
 
@@ -218,7 +231,7 @@
   }
 
   .wheel{
-    width:160px;height:160px;margin:2px auto 18px;border-radius:50%;
+    width:148px;height:148px;margin:2px auto 16px;border-radius:50%;
     position:relative;
     background:
       radial-gradient(circle,#12171b 0 22%,#5d666e 23% 25%,#1d2328 26% 39%,#889199 40% 43%,#272e34 44% 60%,#9aa2a9 61% 64%,#1a2025 65%);
@@ -228,8 +241,8 @@
   .wheel:before,.wheel:after{
     content:"";position:absolute;background:#8f979e;border-radius:7px;box-shadow:0 2px 5px #000;
   }
-  .wheel:before{width:76px;height:14px;left:42px;top:73px}
-  .wheel:after{width:14px;height:76px;left:73px;top:42px}
+  .wheel:before{width:70px;height:13px;left:39px;top:68px}
+  .wheel:after{width:13px;height:70px;left:68px;top:39px}
   .wheel.open{transform:rotate(210deg)}
 
   .legend{display:grid;gap:8px;font-size:12px;color:#c9d0d5}
@@ -316,7 +329,7 @@
 
   .message{
     margin-top:12px;
-    min-height:72px;
+    min-height:78px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -332,12 +345,179 @@
   .message.fail{border-color:#7a4242;color:#f0b1b1;background:#1d0e0e}
 
   .overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,.72);
-    display:none;align-items:center;justify-content:center;padding:24px;z-index:20;
-    backdrop-filter:blur(5px);
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(211,167,74,.10), transparent 32%),
+      rgba(0,0,0,.82);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:20;
+    backdrop-filter:blur(6px);
+    overflow:hidden;
   }
   .overlay.show{display:flex}
+
+  .success-scene{
+    display:none;
+    width:min(620px,100%);
+    text-align:center;
+    position:relative;
+  }
+  .success-scene.show{display:block}
+
+  .vault-anim{
+    width:300px;
+    height:300px;
+    margin:0 auto;
+    position:relative;
+    perspective:900px;
+    opacity:0;
+    transform:translate(34vw,-16vh) scale(.24);
+  }
+  .vault-anim.approach{
+    animation:vaultApproach 1.05s cubic-bezier(.18,.8,.2,1) forwards;
+  }
+  @keyframes vaultApproach{
+    0%{opacity:.25;transform:translate(34vw,-16vh) scale(.24)}
+    70%{opacity:1;transform:translate(0,0) scale(1.06)}
+    100%{opacity:1;transform:translate(0,0) scale(1)}
+  }
+
+  .vault-frame{
+    position:absolute;
+    inset:0;
+    border-radius:28px;
+    background:
+      linear-gradient(145deg,rgba(255,255,255,.12),transparent 28%),
+      linear-gradient(180deg,#4a555e,#222a30 55%,#171d21);
+    border:8px solid #11171b;
+    box-shadow:
+      inset 0 0 0 5px #65727b,
+      inset 0 0 0 12px #232b31,
+      0 24px 70px rgba(0,0,0,.7);
+  }
+  .vault-frame:before,
+  .vault-frame:after{
+    content:"";
+    position:absolute;
+    top:36px;
+    bottom:36px;
+    width:14px;
+    background:linear-gradient(#7a858d,#3b464d);
+    border-radius:7px;
+    box-shadow:0 0 0 3px #151b1f;
+  }
+  .vault-frame:before{left:22px}
+  .vault-frame:after{right:22px}
+
+  .vault-door{
+    position:absolute;
+    inset:28px;
+    border-radius:22px;
+    transform-origin:8% 50%;
+    transform-style:preserve-3d;
+    background:
+      radial-gradient(circle at 48% 44%,#56636c 0 8%,#2c353b 9% 33%,#59656d 34% 36%,#242c32 37% 100%);
+    border:5px solid #6f7b84;
+    box-shadow:inset 0 0 0 8px #1c2328, inset 0 0 28px rgba(0,0,0,.75);
+    transition:transform .95s cubic-bezier(.18,.72,.2,1), filter .5s ease;
+  }
+  .vault-door.open{
+    transform:perspective(900px) rotateY(-42deg) translateX(-14px);
+    filter:brightness(1.13);
+  }
+
+  .vault-wheel-big{
+    position:absolute;
+    width:126px;
+    height:126px;
+    left:50%;
+    top:50%;
+    margin:-63px 0 0 -63px;
+    border-radius:50%;
+    background:
+      radial-gradient(circle,#20272c 0 23%,#87929a 24% 28%,#2f383e 29% 51%,#77838b 52% 56%,#20272c 57%);
+    box-shadow:0 8px 18px rgba(0,0,0,.55),inset 0 0 0 2px #12181c;
+    transition:transform .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .vault-wheel-big:before,
+  .vault-wheel-big:after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    background:#98a2a9;
+    border-radius:8px;
+    box-shadow:0 2px 5px #000;
+    transform:translate(-50%,-50%);
+  }
+  .vault-wheel-big:before{width:92px;height:13px}
+  .vault-wheel-big:after{width:13px;height:92px}
+  .vault-wheel-big.turn{transform:rotate(410deg)}
+
+  .vault-glow{
+    position:absolute;
+    inset:56px;
+    border-radius:18px;
+    background:radial-gradient(circle,rgba(255,221,107,.82),rgba(235,177,56,.28) 42%,transparent 68%);
+    opacity:0;
+    transform:scale(.72);
+    transition:opacity .45s ease, transform .55s ease;
+    pointer-events:none;
+  }
+  .vault-glow.on{opacity:1;transform:scale(1.22)}
+
+  .sparkles{
+    position:absolute;
+    left:50%;
+    top:48%;
+    width:1px;
+    height:1px;
+    pointer-events:none;
+    z-index:5;
+  }
+  .spark{
+    --tx:0px;
+    --ty:-160px;
+    --rot:180deg;
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:2px;
+    background:#f7df78;
+    box-shadow:0 0 8px rgba(255,223,120,.8);
+    opacity:0;
+    animation:sparkBurst 1.35s ease-out forwards;
+  }
+  .spark:nth-child(3n){border-radius:50%;background:#fff1b0}
+  .spark:nth-child(4n){width:5px;height:13px;background:#e9b64f}
+  @keyframes sparkBurst{
+    0%{opacity:0;transform:translate(0,0) rotate(0) scale(.4)}
+    12%{opacity:1}
+    100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(1.15)}
+  }
+
+  .success-copy{
+    opacity:0;
+    transform:translateY(12px) scale(.96);
+    transition:opacity .5s ease, transform .5s ease;
+    margin-top:12px;
+  }
+  .success-copy.show{opacity:1;transform:translateY(0) scale(1)}
+  .success-copy h2{
+    font-size:clamp(34px,7vw,56px);
+    margin:0 0 8px;
+    letter-spacing:.02em;
+    color:#ffe6a0;
+    text-shadow:0 3px 18px rgba(213,167,74,.30);
+  }
+  .success-copy p{margin:0 0 16px;color:#e3e7ea;font-size:17px}
+
   .modal{
+    display:none;
     width:min(520px,100%);
     border-radius:22px;
     border:1px solid #69737b;
@@ -346,6 +526,7 @@
     box-shadow:0 30px 90px #000;
     text-align:center;
   }
+  .modal.show{display:block}
   .modal .icon{font-size:56px}
   .modal h2{font-size:30px;margin:12px 0 8px}
   .modal p{color:#c5ccd1;line-height:1.5}
@@ -355,6 +536,66 @@
   .code-reveal span{
     width:48px;height:48px;display:grid;place-items:center;border-radius:10px;
     background:#0c1013;border:1px solid #4d565e;font-size:27px;
+  }
+
+  .pin-flyout{
+    position:fixed;
+    display:none;
+    align-items:center;
+    gap:8px;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid #69737b;
+    background:linear-gradient(180deg,#252d33,#101519);
+    box-shadow:0 18px 44px rgba(0,0,0,.48);
+    z-index:60;
+    max-width:min(92vw, 430px);
+  }
+  .pin-flyout.show{display:flex}
+  .pin-input{
+    width:150px;
+    max-width:36vw;
+    padding:10px 12px;
+    text-align:center;
+    font-size:22px;
+    letter-spacing:.18em;
+    color:white;
+    background:#0b1013;
+    border:1px solid #56616a;
+    border-radius:10px;
+    outline:none;
+    flex:0 1 auto;
+  }
+  .pin-input:focus{border-color:#d3a74a;box-shadow:0 0 0 3px rgba(211,167,74,.12)}
+  .pin-error{
+    position:fixed;
+    display:none;
+    z-index:61;
+    color:#ffb5b5;
+    font-size:12px;
+    background:rgba(39,11,11,.92);
+    border:1px solid #7a4242;
+    border-radius:8px;
+    padding:6px 8px;
+    box-shadow:0 10px 24px rgba(0,0,0,.35);
+  }
+  .pin-error.show{display:block}
+
+  @media (max-width:650px){
+    .pin-flyout{
+      max-width:94vw;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .pin-input{
+      width:100%;
+      max-width:100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .vault-anim.approach,.spark{animation-duration:.01ms!important}
+    .vault-door,.vault-wheel-big,.vault-glow,.success-copy{transition-duration:.01ms!important}
   }
 
   .footer-note{
@@ -395,6 +636,8 @@
   </div>
 
   <section class="safe">
+    <span class="bolt-bl" aria-hidden="true"></span>
+    <span class="bolt-br" aria-hidden="true"></span>
     <div class="status-row">
       <div class="attempts" id="attemptText">Essai 1 / 10</div>
       <div class="hint">5 symboles différents parmi 8 — aucun symbole ne peut être répété.</div>
@@ -407,7 +650,8 @@
 
         <div class="controls">
           <button class="btn success" id="validateBtn">Valider</button>
-          <button class="btn danger" id="clearBtn">Effacer</button>
+          <button class="btn warnbtn" id="eraseOneBtn">Effacer un symbole</button>
+          <button class="btn danger" id="clearBtn">Effacer tout</button>
         </div>
 
         <div class="message" id="message">
@@ -436,14 +680,44 @@
 </div>
 
 <div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="icon" id="modalIcon">🔓</div>
-    <h2 id="modalTitle">Coffre ouvert</h2>
+  <div class="success-scene" id="successScene" aria-live="polite">
+    <div class="vault-anim" id="vaultAnim">
+      <div class="vault-frame">
+        <div class="vault-glow" id="vaultGlow"></div>
+        <div class="vault-door" id="vaultDoor">
+          <div class="vault-wheel-big" id="vaultWheelBig"></div>
+        </div>
+      </div>
+      <div class="sparkles" id="sparkles"></div>
+    </div>
+    <div class="success-copy" id="successCopy">
+      <h2>Félicitations !</h2>
+      <p id="successText"></p>
+      <button class="btn primary" id="nextCandidateSuccess">Passer au candidat suivant</button>
+        <div class="pin-error" id="pinErrorOverlay"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="resultModal">
+    <div class="icon" id="modalIcon">🔒</div>
+    <h2 id="modalTitle">Coffre verrouillé</h2>
     <p id="modalText"></p>
     <div class="code-reveal" id="codeReveal"></div>
-    <button class="btn primary" id="nextCandidateModal">Candidat suivant</button>
+    <button class="btn primary" id="nextCandidateModal">Passer au candidat suivant</button>
+      <div class="pin-error" id="pinErrorFail"></div>
+    </div>
   </div>
 </div>
+  <div class="pin-error" id="pinErrorOverlay"></div>
+</div>
+
+<div class="pin-flyout" id="pinFlyout" role="dialog" aria-modal="false" aria-label="Code examinateur">
+  <input class="pin-input" id="pinInput" type="password" inputmode="numeric" autocomplete="off" aria-label="Code examinateur" />
+  <button class="btn success" id="pinConfirm">OK</button>
+  <button class="btn" id="pinCancel">Annuler</button>
+</div>
+<div class="pin-error" id="pinError">Code incorrect.</div>
 
 <script>
 (() => {
@@ -463,10 +737,27 @@
   const attemptText = document.getElementById("attemptText");
   const wheel = document.getElementById("wheel");
   const overlay = document.getElementById("overlay");
+  const successScene = document.getElementById("successScene");
+  const vaultAnim = document.getElementById("vaultAnim");
+  const vaultDoor = document.getElementById("vaultDoor");
+  const vaultWheelBig = document.getElementById("vaultWheelBig");
+  const vaultGlow = document.getElementById("vaultGlow");
+  const sparkles = document.getElementById("sparkles");
+  const successCopy = document.getElementById("successCopy");
+  const successText = document.getElementById("successText");
+  const resultModal = document.getElementById("resultModal");
   const modalIcon = document.getElementById("modalIcon");
   const modalTitle = document.getElementById("modalTitle");
   const modalText = document.getElementById("modalText");
   const codeReveal = document.getElementById("codeReveal");
+
+  const pinFlyout = document.getElementById("pinFlyout");
+  const pinInput = document.getElementById("pinInput");
+  const pinError = document.getElementById("pinError");
+
+  const EXAMINER_CODE = "4321";
+  let activePinContext = null;
+  let activePinAnchor = null;
 
   function shuffled(arr){
     const a = [...arr];
@@ -489,6 +780,15 @@
     gameOver = false;
     wheel.classList.remove("open");
     overlay.classList.remove("show");
+    successScene.classList.remove("show");
+    vaultAnim.classList.remove("approach");
+    vaultDoor.classList.remove("open");
+    vaultWheelBig.classList.remove("turn");
+    vaultGlow.classList.remove("on");
+    successCopy.classList.remove("show");
+    resultModal.classList.remove("show");
+    sparkles.innerHTML = "";
+    closePin();
     message.className = "message";
     message.textContent = "Sélectionnez 5 symboles différents puis validez.";
     render();
@@ -580,25 +880,135 @@
     });
   }
 
+  function createSparkles(){
+    sparkles.innerHTML = "";
+    const count = 54;
+    for(let i=0;i<count;i++){
+      const s = document.createElement("span");
+      s.className = "spark";
+      const angle = (-155 + Math.random()*310) * Math.PI / 180;
+      const distance = 95 + Math.random()*190;
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance - 50 - Math.random()*65;
+      s.style.setProperty("--tx", `${x.toFixed(0)}px`);
+      s.style.setProperty("--ty", `${y.toFixed(0)}px`);
+      s.style.setProperty("--rot", `${Math.floor(Math.random()*720-360)}deg`);
+      s.style.animationDelay = `${(Math.random()*.18).toFixed(2)}s`;
+      sparkles.appendChild(s);
+    }
+  }
+
+  function playSuccessAnimation(){
+    overlay.classList.add("show");
+    resultModal.classList.remove("show");
+    successScene.classList.add("show");
+
+    vaultAnim.classList.remove("approach");
+    vaultDoor.classList.remove("open");
+    vaultWheelBig.classList.remove("turn");
+    vaultGlow.classList.remove("on");
+    successCopy.classList.remove("show");
+    sparkles.innerHTML = "";
+
+    void vaultAnim.offsetWidth;
+    vaultAnim.classList.add("approach");
+
+    setTimeout(()=>vaultWheelBig.classList.add("turn"), 700);
+    setTimeout(()=>{
+      vaultDoor.classList.add("open");
+      vaultGlow.classList.add("on");
+      createSparkles();
+    }, 1450);
+    setTimeout(()=>successCopy.classList.add("show"), 1900);
+  }
+
+  function hidePinError(){
+    pinError.classList.remove("show");
+    pinError.textContent = "Code incorrect.";
+  }
+
+  function positionPinFlyout(){
+    if(!activePinAnchor) return;
+    const r = activePinAnchor.getBoundingClientRect();
+    const flyoutWidth = Math.min(430, window.innerWidth * 0.92);
+
+    let left;
+    let top = r.bottom + 10;
+
+    if(activePinContext === "main"){
+      left = Math.min(
+        window.innerWidth - flyoutWidth - 12,
+        Math.max(12, r.right - flyoutWidth)
+      );
+    }else{
+      left = Math.max(12, Math.min(window.innerWidth - flyoutWidth - 12, r.left + r.width/2 - flyoutWidth/2));
+      top = r.bottom + 12;
+    }
+
+    if(top + 70 > window.innerHeight){
+      top = Math.max(12, r.top - 78);
+    }
+
+    pinFlyout.style.left = `${left}px`;
+    pinFlyout.style.top = `${top}px`;
+
+    pinError.style.left = `${left}px`;
+    pinError.style.top = `${top + 58}px`;
+  }
+
+  function openPin(context, anchorEl){
+    activePinContext = context;
+    activePinAnchor = anchorEl || null;
+    pinFlyout.classList.add("show");
+    pinInput.value = "";
+    hidePinError();
+    positionPinFlyout();
+    setTimeout(()=>pinInput.focus(), 40);
+  }
+
+  function closePin(){
+    pinFlyout.classList.remove("show");
+    hidePinError();
+    pinInput.value = "";
+    activePinContext = null;
+    activePinAnchor = null;
+  }
+
+  function confirmPin(){
+    const value = pinInput.value.trim();
+    if(value === EXAMINER_CODE){
+      closePin();
+      startGame();
+    }else{
+      pinError.textContent = "Code incorrect.";
+      pinError.classList.add("show");
+      pinInput.focus();
+      pinInput.select();
+      positionPinFlyout();
+    }
+  }
+
   function finish(win){
     gameOver = true;
     revealCode();
+
     if(win){
-      wheel.classList.add("open");
-      modalIcon.textContent = "🔓";
-      modalTitle.textContent = "Coffre ouvert";
-      modalText.textContent = `Combinaison trouvée en ${attempts.length} essai${attempts.length>1?"s":""}.`;
+      successText.textContent = `Coffre ouvert en ${attempts.length} essai${attempts.length>1?"s":""}.`;
       message.className = "message success";
       message.textContent = "Accès autorisé — coffre ouvert.";
+      render();
+      setTimeout(playSuccessAnimation, 220);
     }else{
       modalIcon.textContent = "🔒";
       modalTitle.textContent = "Coffre verrouillé";
       modalText.textContent = "Les 10 essais ont été utilisés. La combinaison était :";
       message.className = "message fail";
       message.textContent = "Échec — les 10 essais ont été utilisés.";
+      successScene.classList.remove("show");
+      resultModal.classList.add("show");
+      overlay.classList.add("show");
+      render();
     }
-    setTimeout(()=>overlay.classList.add("show"), 380);
-    render();
   }
 
   function validate(){
@@ -629,15 +1039,41 @@
   }
 
   document.getElementById("validateBtn").addEventListener("click", validate);
+  document.getElementById("eraseOneBtn").addEventListener("click", ()=>{
+    if(gameOver || currentGuess.length === 0) return;
+    currentGuess.pop();
+    message.className = "message";
+    message.textContent = currentGuess.length
+      ? "Dernier symbole retiré."
+      : "Sélection effacée.";
+    render();
+  });
   document.getElementById("clearBtn").addEventListener("click", ()=>{
     if(gameOver) return;
     currentGuess = [];
     message.className = "message";
-    message.textContent = "Sélection effacée.";
+    message.textContent = "Tous les symboles sélectionnés ont été retirés.";
     render();
   });
-  document.getElementById("nextCandidateTop").addEventListener("click", startGame);
-  document.getElementById("nextCandidateModal").addEventListener("click", startGame);
+  const nextCandidateTop = document.getElementById("nextCandidateTop");
+  const nextCandidateModal = document.getElementById("nextCandidateModal");
+  const nextCandidateSuccess = document.getElementById("nextCandidateSuccess");
+
+  nextCandidateTop.addEventListener("click", ()=>openPin("main", nextCandidateTop));
+  nextCandidateModal.addEventListener("click", ()=>openPin("fail", nextCandidateModal));
+  nextCandidateSuccess.addEventListener("click", ()=>openPin("success", nextCandidateSuccess));
+
+  document.getElementById("pinConfirm").addEventListener("click", confirmPin);
+  document.getElementById("pinCancel").addEventListener("click", closePin);
+
+  pinInput.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter") confirmPin();
+    if(e.key === "Escape") closePin();
+  });
+
+  window.addEventListener("resize", ()=>{
+    if(pinFlyout.classList.contains("show")) positionPinFlyout();
+  });
 
   window.addEventListener("keydown", (e)=>{
     if(e.key === "Enter") validate();
