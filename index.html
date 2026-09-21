@@ -303,8 +303,8 @@
   .wheel:after{width:13px;height:70px;left:68px;top:39px}
   .wheel.open{transform:rotate(210deg)}
 
-  .legend{display:grid;gap:8px;font-size:12px;color:#c9d0d5}
-  .legend-item{display:flex;align-items:center;gap:8px;line-height:1.25}
+  .legend{display:grid;gap:14px;font-size:15px;color:#c9d0d5}
+  .legend-item{display:flex;align-items:flex-start;gap:10px;line-height:1.28}
   .peg{
     width:16px;
     height:16px;
@@ -781,9 +781,9 @@
       <aside class="side">
         <div class="wheel" id="wheel" aria-hidden="true"></div>
         <div class="legend">
-          <div class="legend-item"><span class="peg ok"></span> Bon symbole, bonne position</div>
-          <div class="legend-item"><span class="peg warn"></span> Bon symbole, mauvaise position</div>
-          <div class="legend-item"><span class="peg bad"></span> Symbole absent du code</div>
+          <div class="legend-item"><span class="peg ok"></span><span>Bon symbole,<br>bonne position</span></div>
+          <div class="legend-item"><span class="peg warn"></span><span>Bon symbole,<br>mauvaise position</span></div>
+          <div class="legend-item"><span class="peg bad"></span><span>Symbole absent du code</span></div>
         </div>
       </aside>
     </div>
