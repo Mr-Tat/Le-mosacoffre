@@ -39,7 +39,7 @@
     padding:24px;
   }
 
-  .app{width:min(880px,100%)}
+  .app{width:min(880px,100%); transform:scale(1.2); transform-origin:top center;}
 
   .topbar{
     display:flex;
@@ -134,21 +134,73 @@
 
   .status-row{
     display:flex;
+    justify-content:center;
     align-items:center;
-    justify-content:space-between;
-    gap:16px;
-    margin-bottom:18px;
-    flex-wrap:wrap;
-    padding: 4px 38px 0 38px;
+    margin-bottom:12px;
+    padding:4px 38px 0 38px;
   }
   .attempts{
-    font-weight:800;
+    min-width:158px;
+    padding:13px 18px;
+    border-radius:14px;
+    border:1px solid #68747d;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,0)),
+      linear-gradient(180deg,#29323a,#171e23);
+    box-shadow:
+      inset 0 1px rgba(255,255,255,.07),
+      0 6px 16px rgba(0,0,0,.25);
+    font-weight:900;
+    font-size:20px;
+    line-height:1;
+    letter-spacing:.015em;
     font-variant-numeric:tabular-nums;
-    color:#f5f7f8;
+    color:#fff;
+    text-align:center;
+    white-space:nowrap;
+    margin:0 auto;
+  }
+  .attempts .attempt-number{
+    color:#ffd66b;
+    font-size:25px;
   }
   .hint{
-    color:var(--muted);
-    font-size:14px;
+    color:#d8dde0;
+    font-size:17px;
+    font-weight:700;
+    line-height:1.2;
+    text-align:center;
+    white-space:nowrap;
+    padding:15px 34px;
+    border-radius:16px;
+    border:1px solid #8b98a2;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03) 18%,rgba(255,255,255,0) 22%),
+      linear-gradient(180deg,#88929a 0%,#5d676e 16%,#384148 48%,#252d33 78%,#1c2328 100%);
+    box-shadow:
+      inset 0 1px rgba(255,255,255,.22),
+      inset 0 -1px rgba(0,0,0,.30),
+      inset 0 0 12px rgba(255,255,255,.05),
+      0 5px 12px rgba(0,0,0,.24);
+    letter-spacing:.01em;
+    text-shadow:
+      0 1px 0 rgba(255,255,255,.10),
+      0 -1px 0 rgba(0,0,0,.78);
+    max-width:none;
+  }
+
+  .left-column{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-self:start;
+    position:sticky;
+    top:18px;
+    margin-top:24px;
+  }
+
+  .board-column{
+    margin-top:6px;
   }
 
   .main-grid{
@@ -156,11 +208,13 @@
     grid-template-columns: 200px max-content 210px;
     gap:16px;
     align-items:start;
+    justify-content:center;
   }
 
   .symbol-panel{
-    position:sticky;
-    top:18px;
+    position:static;
+    top:auto;
+    align-self:stretch;
     border:1px solid #404951;
     border-radius:18px;
     padding:14px;
@@ -179,24 +233,28 @@
 
   .board{
     display:grid;
-    gap:9px;
+    gap:8px;
   }
   .row{
     display:grid;
     grid-template-columns: repeat(5, minmax(42px,68px));
     gap:9px;
     align-items:center;
-    min-height:62px;
+    min-height:58px;
   }
   .slot{
-    height:56px;
+    height:52px;
     border-radius:11px;
     display:grid;
     place-items:center;
+    align-content:center;
+    justify-content:center;
     border:1px solid #424a51;
     background:linear-gradient(180deg,#11161a,#090c0f);
     box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px rgba(255,255,255,.04);
     font-size:30px;
+    line-height:1;
+    padding:0;
     user-select:none;
   }
   .row.current .slot{
@@ -507,6 +565,49 @@
     margin-top:12px;
   }
   .success-copy.show{opacity:1;transform:translateY(0) scale(1)}
+
+  .fail-scene{
+    display:none;
+    width:min(620px,100%);
+    text-align:center;
+    position:relative;
+  }
+  .fail-scene.show{display:block}
+
+  .vault-anim.fail .vault-door{
+    filter:brightness(.88) saturate(.9);
+  }
+  .vault-wheel-big.blocked{
+    animation:blockJerk 1.4s ease-in-out forwards;
+  }
+  @keyframes blockJerk{
+    0%{transform:rotate(0deg)}
+    12%{transform:rotate(28deg)}
+    18%{transform:rotate(20deg)}
+    28%{transform:rotate(44deg)}
+    36%{transform:rotate(34deg)}
+    50%{transform:rotate(58deg)}
+    60%{transform:rotate(46deg)}
+    74%{transform:rotate(66deg)}
+    82%{transform:rotate(54deg)}
+    100%{transform:rotate(54deg)}
+  }
+
+  .blocked-copy{
+    opacity:0;
+    transform:translateY(10px) scale(.96);
+    transition:opacity .45s ease, transform .45s ease;
+    margin-top:12px;
+  }
+  .blocked-copy.show{opacity:1;transform:translateY(0) scale(1)}
+  .blocked-copy h2{
+    font-size:clamp(34px,7vw,56px);
+    margin:0 0 8px;
+    letter-spacing:.04em;
+    color:#ff8e8e;
+    text-shadow:0 3px 18px rgba(200,74,74,.28);
+  }
+  .blocked-copy p{margin:0 0 16px;color:#e3e7ea;font-size:17px}
   .success-copy h2{
     font-size:clamp(34px,7vw,56px);
     margin:0 0 8px;
@@ -549,7 +650,8 @@
     background:linear-gradient(180deg,#252d33,#101519);
     box-shadow:0 18px 44px rgba(0,0,0,.48);
     z-index:60;
-    max-width:min(92vw, 430px);
+    width:max-content;
+    max-width:min(94vw, 430px);
   }
   .pin-flyout.show{display:flex}
   .pin-input{
@@ -598,9 +700,6 @@
     .vault-door,.vault-wheel-big,.vault-glow,.success-copy{transition-duration:.01ms!important}
   }
 
-  .footer-note{
-    text-align:center;color:#7f8991;font-size:12px;margin-top:14px;
-  }
 
   @media(max-width:900px){
     .main-grid{grid-template-columns:188px minmax(0,1fr)}
@@ -609,16 +708,30 @@
     .wheel:before{width:52px;height:11px;left:29px;top:49px}
     .wheel:after{width:11px;height:52px;left:49px;top:29px}
     .symbols{grid-template-columns:repeat(2,1fr)}
-    .symbol-panel{position:sticky;top:10px}
+    .left-column{position:sticky;top:12px;margin-top:10px}
+    .symbol-panel{position:static}
+  }
+
+
+  @media(max-width:720px){
+    .status-row{
+      padding:4px 20px 0 20px;
+    }
+    .hint{
+      white-space:normal;
+      width:100%;
+    }
   }
 
   @media(max-width:650px){
     .main-grid{grid-template-columns:1fr}
+    .left-column{position:static;margin-top:8px}
     .symbol-panel{position:static}
     .symbols{grid-template-columns:repeat(2,1fr)}
+    .board-column{margin-top:0}
     .side{display:block}
     .wheel{width:110px;height:110px}
-    .row{grid-template-columns:repeat(5,minmax(36px,1fr));}
+    .row{grid-template-columns:repeat(5,minmax(36px,1fr));min-height:54px;}
   }
 </style>
 </head>
@@ -632,19 +745,20 @@
         <div class="subtitle">Test de logique — trouvez la combinaison</div>
       </div>
     </div>
-    <button class="btn danger" id="nextCandidateTop">Candidat suivant</button>
+    <button class="btn danger" id="nextCandidateTop">Recommencer</button>
   </div>
 
   <section class="safe">
     <span class="bolt-bl" aria-hidden="true"></span>
     <span class="bolt-br" aria-hidden="true"></span>
     <div class="status-row">
-      <div class="attempts" id="attemptText">Essai 1 / 10</div>
-      <div class="hint">5 symboles différents parmi 8 — aucun symbole ne peut être répété.</div>
+      <div class="hint">5 symboles différents parmi 8 — Aucun symbole ne peut être répété.</div>
     </div>
 
     <div class="main-grid">
-      <aside class="symbol-panel">
+      <div class="left-column">
+        <div class="attempts" id="attemptText">Essai <span class="attempt-number">1</span> / 10</div>
+        <aside class="symbol-panel">
         <h3>Symboles</h3>
         <div class="symbols" id="symbols"></div>
 
@@ -658,8 +772,9 @@
           Sélectionnez 5 symboles différents puis validez.
         </div>
       </aside>
+      </div>
 
-      <div>
+      <div class="board-column">
         <div class="board" id="board"></div>
       </div>
 
@@ -673,10 +788,6 @@
       </aside>
     </div>
   </section>
-
-  <div class="footer-note">
-    Fonctionne hors ligne. Le bouton « Candidat suivant » efface la partie et génère une nouvelle combinaison.
-  </div>
 </div>
 
 <div class="overlay" id="overlay">
@@ -694,22 +805,24 @@
       <h2>Félicitations !</h2>
       <p id="successText"></p>
       <button class="btn primary" id="nextCandidateSuccess">Passer au candidat suivant</button>
-        <div class="pin-error" id="pinErrorOverlay"></div>
-      </div>
     </div>
   </div>
 
-  <div class="modal" id="resultModal">
-    <div class="icon" id="modalIcon">🔒</div>
-    <h2 id="modalTitle">Coffre verrouillé</h2>
-    <p id="modalText"></p>
-    <div class="code-reveal" id="codeReveal"></div>
-    <button class="btn primary" id="nextCandidateModal">Passer au candidat suivant</button>
-      <div class="pin-error" id="pinErrorFail"></div>
+  <div class="fail-scene" id="failScene" aria-live="polite">
+    <div class="vault-anim fail" id="failVaultAnim">
+      <div class="vault-frame">
+        <div class="vault-door" id="failVaultDoor">
+          <div class="vault-wheel-big" id="failVaultWheel"></div>
+        </div>
+      </div>
+    </div>
+    <div class="blocked-copy" id="blockedCopy">
+      <h2>BLOQUÉ</h2>
+      <p id="blockedText"></p>
+      <div class="code-reveal" id="codeReveal"></div>
+      <button class="btn primary" id="nextCandidateModal">Réessayer ?</button>
     </div>
   </div>
-</div>
-  <div class="pin-error" id="pinErrorOverlay"></div>
 </div>
 
 <div class="pin-flyout" id="pinFlyout" role="dialog" aria-modal="false" aria-label="Code examinateur">
@@ -745,10 +858,13 @@
   const sparkles = document.getElementById("sparkles");
   const successCopy = document.getElementById("successCopy");
   const successText = document.getElementById("successText");
-  const resultModal = document.getElementById("resultModal");
-  const modalIcon = document.getElementById("modalIcon");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalText = document.getElementById("modalText");
+
+  const failScene = document.getElementById("failScene");
+  const failVaultAnim = document.getElementById("failVaultAnim");
+  const failVaultDoor = document.getElementById("failVaultDoor");
+  const failVaultWheel = document.getElementById("failVaultWheel");
+  const blockedCopy = document.getElementById("blockedCopy");
+  const blockedText = document.getElementById("blockedText");
   const codeReveal = document.getElementById("codeReveal");
 
   const pinFlyout = document.getElementById("pinFlyout");
@@ -781,12 +897,18 @@
     wheel.classList.remove("open");
     overlay.classList.remove("show");
     successScene.classList.remove("show");
+    failScene.classList.remove("show");
+
     vaultAnim.classList.remove("approach");
     vaultDoor.classList.remove("open");
     vaultWheelBig.classList.remove("turn");
     vaultGlow.classList.remove("on");
     successCopy.classList.remove("show");
-    resultModal.classList.remove("show");
+
+    failVaultAnim.classList.remove("approach");
+    failVaultWheel.classList.remove("blocked");
+    blockedCopy.classList.remove("show");
+
     sparkles.innerHTML = "";
     closePin();
     message.className = "message";
@@ -868,7 +990,11 @@
     renderBoard();
     renderSymbols();
     const n = Math.min(attempts.length + 1, MAX_ATTEMPTS);
-    attemptText.textContent = gameOver ? `Partie terminée — ${attempts.length} essai${attempts.length>1?"s":""}` : `Essai ${n} / ${MAX_ATTEMPTS}`;
+    if(gameOver){
+      attemptText.textContent = `Partie terminée — ${attempts.length} essai${attempts.length>1?"s":""}`;
+    }else{
+      attemptText.innerHTML = `Essai <span class="attempt-number">${n}</span> / ${MAX_ATTEMPTS}`;
+    }
   }
 
   function revealCode(){
@@ -930,7 +1056,7 @@
   function positionPinFlyout(){
     if(!activePinAnchor) return;
     const r = activePinAnchor.getBoundingClientRect();
-    const flyoutWidth = Math.min(430, window.innerWidth * 0.92);
+    const flyoutWidth = Math.min(430, window.innerWidth * 0.94);
 
     let left;
     let top = r.bottom + 10;
@@ -954,6 +1080,22 @@
 
     pinError.style.left = `${left}px`;
     pinError.style.top = `${top + 58}px`;
+  }
+
+  function playFailAnimation(){
+    overlay.classList.add("show");
+    successScene.classList.remove("show");
+    failScene.classList.add("show");
+
+    failVaultAnim.classList.remove("approach");
+    failVaultWheel.classList.remove("blocked");
+    blockedCopy.classList.remove("show");
+
+    void failVaultAnim.offsetWidth;
+    failVaultAnim.classList.add("approach");
+
+    setTimeout(()=>failVaultWheel.classList.add("blocked"), 760);
+    setTimeout(()=>blockedCopy.classList.add("show"), 1500);
   }
 
   function openPin(context, anchorEl){
@@ -999,15 +1141,11 @@
       render();
       setTimeout(playSuccessAnimation, 220);
     }else{
-      modalIcon.textContent = "🔒";
-      modalTitle.textContent = "Coffre verrouillé";
-      modalText.textContent = "Les 10 essais ont été utilisés. La combinaison était :";
+      blockedText.textContent = "Le mécanisme résiste. Les 10 essais ont été utilisés. La combinaison était :";
       message.className = "message fail";
-      message.textContent = "Échec — les 10 essais ont été utilisés.";
-      successScene.classList.remove("show");
-      resultModal.classList.add("show");
-      overlay.classList.add("show");
+      message.textContent = "Échec — le coffre est bloqué.";
       render();
+      setTimeout(playFailAnimation, 220);
     }
   }
 
