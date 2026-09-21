@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Le mosa'coffre</title>
+<style>
+  :root{
+    --bg:#0a0d10;
+    --panel:#151a1f;
+    --panel2:#0f1418;
+    --steel:#6c747c;
+    --steel2:#343b42;
+    --edge:#8a949d;
+    --gold:#d3a74a;
+    --gold2:#9e772c;
+    --text:#eef2f4;
+    --muted:#a8b0b7;
+    --ok:#2fbf71;
+    --warn:#e8a63b;
+    --bad:#c84a4a;
+    --shadow: 0 20px 70px rgba(0,0,0,.55);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    color:var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(circle at 16% 12%, rgba(74,116,154,.20), transparent 26%),
+      radial-gradient(circle at 84% 18%, rgba(185,140,76,.13), transparent 24%),
+      radial-gradient(circle at 50% 88%, rgba(72,95,122,.16), transparent 28%),
+      linear-gradient(180deg,#121922 0%,#0b1015 50%,#07090c 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .app{width:min(920px,100%)}
+
+  .topbar{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .title-wrap{display:flex;align-items:center;gap:14px}
+  .mini-dial{
+    width:46px;height:46px;border-radius:50%;
+    background:
+      radial-gradient(circle,#1c2227 0 29%,#9da6ad 30% 34%,#2a3137 35% 52%,#aab2b8 53% 57%,#20262b 58%);
+    box-shadow:inset 0 0 0 2px #111,0 4px 16px #000;
+    position:relative;
+  }
+  .mini-dial:after{
+    content:""; position:absolute; width:3px;height:15px;left:50%;top:5px;transform:translateX(-50%);
+    background:var(--gold);border-radius:2px;
+  }
+  h1{margin:0;font-size:clamp(24px,4vw,38px);letter-spacing:.04em}
+  .subtitle{color:var(--muted);font-size:14px;margin-top:2px}
+
+  .btn{
+    border:1px solid #59636c;
+    background:linear-gradient(#313941,#20272d);
+    color:white;
+    padding:11px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:750;
+    letter-spacing:.02em;
+    box-shadow: inset 0 1px rgba(255,255,255,.08), 0 4px 12px rgba(0,0,0,.25);
+  }
+  .btn:hover{filter:brightness(1.08)}
+  .btn.primary{
+    border-color:#c79e43;
+    background:linear-gradient(#ddb666,#a67c2d);
+    color:#17120a;
+  }
+  .btn.danger{
+    border-color:#8b4444;
+    background:linear-gradient(#8e4747,#5a2a2a);
+  }
+  .btn.success{
+    border-color:#3f8a60;
+    background:linear-gradient(#49b66f,#2d7f4d);
+    color:#f4fff7;
+  }
+
+  .safe{
+    border:2px solid #59636c;
+    border-radius:24px;
+    background:
+      radial-gradient(circle at 18% 18%, rgba(255,255,255,.05), transparent 18%),
+      radial-gradient(circle at 82% 22%, rgba(221,182,102,.07), transparent 18%),
+      linear-gradient(rgba(13,18,24,.54), rgba(13,18,24,.74)),
+      url("data:image/svg+xml;utf8,%0A%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%201400%201000%27%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3CradialGradient%20id%3D%27panel%27%20cx%3D%2750%25%27%20cy%3D%2745%25%27%20r%3D%2770%25%27%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%270%25%27%20stop-color%3D%27%2335424b%27/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%2738%25%27%20stop-color%3D%27%23242d33%27/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%27100%25%27%20stop-color%3D%27%23151b20%27/%3E%0A%20%20%20%20%3C/radialGradient%3E%0A%20%20%20%20%3CradialGradient%20id%3D%27hub%27%20cx%3D%2750%25%27%20cy%3D%2750%25%27%20r%3D%2765%25%27%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%270%25%27%20stop-color%3D%27%2371808a%27/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%2755%25%27%20stop-color%3D%27%2345525b%27/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%27100%25%27%20stop-color%3D%27%23283038%27/%3E%0A%20%20%20%20%3C/radialGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%27metal%27%20x1%3D%270%27%20x2%3D%271%27%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%270%25%27%20stop-color%3D%27%2353616a%27/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%2750%25%27%20stop-color%3D%27%2373808a%27/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%27100%25%27%20stop-color%3D%27%2348545d%27/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%0A%20%20%3Crect%20width%3D%271400%27%20height%3D%271000%27%20fill%3D%27%2312171b%27/%3E%0A%20%20%3Crect%20x%3D%27210%27%20y%3D%2790%27%20width%3D%27980%27%20height%3D%27820%27%20rx%3D%2746%27%20fill%3D%27url%28%23panel%29%27%20stroke%3D%27%2320282d%27%20stroke-width%3D%2714%27/%3E%0A%20%20%3Crect%20x%3D%27240%27%20y%3D%27120%27%20width%3D%27920%27%20height%3D%27760%27%20rx%3D%2736%27%20fill%3D%27none%27%20stroke%3D%27%23445059%27%20stroke-width%3D%278%27%20opacity%3D%270.9%27/%3E%0A%20%20%3Crect%20x%3D%27272%27%20y%3D%27152%27%20width%3D%27856%27%20height%3D%27696%27%20rx%3D%2724%27%20fill%3D%27none%27%20stroke%3D%27%232a3339%27%20stroke-width%3D%276%27%20opacity%3D%270.85%27/%3E%0A%0A%20%20%3Crect%20x%3D%27196%27%20y%3D%27255%27%20width%3D%2728%27%20height%3D%27110%27%20rx%3D%279%27%20fill%3D%27%235f6c75%27/%3E%0A%20%20%3Crect%20x%3D%27196%27%20y%3D%27445%27%20width%3D%2728%27%20height%3D%27110%27%20rx%3D%279%27%20fill%3D%27%235f6c75%27/%3E%0A%20%20%3Crect%20x%3D%27196%27%20y%3D%27635%27%20width%3D%2728%27%20height%3D%27110%27%20rx%3D%279%27%20fill%3D%27%235f6c75%27/%3E%0A%0A%20%20%3Ccircle%20cx%3D%27700%27%20cy%3D%27500%27%20r%3D%27248%27%20fill%3D%27none%27%20stroke%3D%27%234f5d66%27%20stroke-width%3D%2718%27/%3E%0A%20%20%3Ccircle%20cx%3D%27700%27%20cy%3D%27500%27%20r%3D%27214%27%20fill%3D%27none%27%20stroke%3D%27%2330393f%27%20stroke-width%3D%277%27/%3E%0A%20%20%3Ccircle%20cx%3D%27700%27%20cy%3D%27500%27%20r%3D%27164%27%20fill%3D%27none%27%20stroke%3D%27%2356636c%27%20stroke-width%3D%277%27%20opacity%3D%270.85%27/%3E%0A%20%20%3Ccircle%20cx%3D%27700%27%20cy%3D%27500%27%20r%3D%27104%27%20fill%3D%27url%28%23hub%29%27%20stroke%3D%27%23798790%27%20stroke-width%3D%278%27/%3E%0A%20%20%3Ccircle%20cx%3D%27700%27%20cy%3D%27500%27%20r%3D%2734%27%20fill%3D%27%23263037%27%20stroke%3D%27%236d7c86%27%20stroke-width%3D%275%27/%3E%0A%0A%20%20%3Cg%20stroke%3D%27url%28%23metal%29%27%20stroke-width%3D%2718%27%20stroke-linecap%3D%27round%27%3E%0A%20%20%20%20%3Cline%20x1%3D%27700%27%20y1%3D%27378%27%20x2%3D%27700%27%20y2%3D%27622%27/%3E%0A%20%20%20%20%3Cline%20x1%3D%27578%27%20y1%3D%27500%27%20x2%3D%27822%27%20y2%3D%27500%27/%3E%0A%20%20%20%20%3Cline%20x1%3D%27614%27%20y1%3D%27414%27%20x2%3D%27786%27%20y2%3D%27586%27/%3E%0A%20%20%20%20%3Cline%20x1%3D%27786%27%20y1%3D%27414%27%20x2%3D%27614%27%20y2%3D%27586%27/%3E%0A%20%20%3C/g%3E%0A%0A%20%20%3Cg%20stroke%3D%27%2349565e%27%20stroke-width%3D%2722%27%20stroke-linecap%3D%27round%27%20opacity%3D%270.8%27%3E%0A%20%20%20%20%3Cline%20x1%3D%27934%27%20y1%3D%27500%27%20x2%3D%271082%27%20y2%3D%27500%27/%3E%0A%20%20%20%20%3Cline%20x1%3D%27318%27%20y1%3D%27500%27%20x2%3D%27466%27%20y2%3D%27500%27/%3E%0A%20%20%20%20%3Cline%20x1%3D%27700%27%20y1%3D%27266%27%20x2%3D%27700%27%20y2%3D%27118%27/%3E%0A%20%20%20%20%3Cline%20x1%3D%27700%27%20y1%3D%27734%27%20x2%3D%27700%27%20y2%3D%27882%27/%3E%0A%20%20%3C/g%3E%0A%0A%20%20%3Cg%20fill%3D%27%2366747d%27%20stroke%3D%27%232a3339%27%20stroke-width%3D%273%27%20opacity%3D%270.95%27%3E%0A%20%20%20%20%3Ccircle%20cx%3D%27320%27%20cy%3D%27210%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%27520%27%20cy%3D%27210%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%27700%27%20cy%3D%27210%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%27880%27%20cy%3D%27210%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%271080%27%20cy%3D%27210%27%20r%3D%2716%27/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%27320%27%20cy%3D%27790%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%27520%27%20cy%3D%27790%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%27700%27%20cy%3D%27790%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%27880%27%20cy%3D%27790%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%271080%27%20cy%3D%27790%27%20r%3D%2716%27/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%27300%27%20cy%3D%27320%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27500%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27680%27%20r%3D%2716%27/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%271100%27%20cy%3D%27320%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%271100%27%20cy%3D%27500%27%20r%3D%2716%27/%3E%3Ccircle%20cx%3D%271100%27%20cy%3D%27680%27%20r%3D%2716%27/%3E%0A%20%20%3C/g%3E%0A%0A%20%20%3Crect%20x%3D%27990%27%20y%3D%27432%27%20width%3D%2788%27%20height%3D%27136%27%20rx%3D%2714%27%20fill%3D%27%23293238%27%20stroke%3D%27%2353616a%27%20stroke-width%3D%276%27/%3E%0A%20%20%3Crect%20x%3D%271018%27%20y%3D%27472%27%20width%3D%2734%27%20height%3D%2756%27%20rx%3D%278%27%20fill%3D%27%2348545d%27/%3E%0A%0A%20%20%3Crect%20width%3D%271400%27%20height%3D%271000%27%20fill%3D%27none%27%20stroke%3D%27%230f1316%27%20stroke-width%3D%27140%27%20opacity%3D%270.35%27/%3E%0A%3C/svg%3E%0A") center center / 92% auto no-repeat,
+      linear-gradient(145deg,rgba(255,255,255,.05),transparent 26%),
+      linear-gradient(180deg,#2b343d 0%,#1b232a 40%,#12181d 100%);
+    padding:24px;
+    box-shadow:
+      0 22px 80px rgba(0,0,0,.52),
+      inset 0 0 0 5px #0a0d0f,
+      inset 0 0 0 7px #3d464d,
+      inset 0 1px 0 rgba(255,255,255,.05);
+    position:relative;
+    overflow:hidden;
+  }
+  .safe > *{position:relative;z-index:1}
+
+  .safe:before,.safe:after{
+    content:"";position:absolute;top:18px;width:20px;height:20px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#aab2b8,#384048 45%,#111 48%);
+    box-shadow:0 calc(100vh - 160px) 0 #222;
+    z-index:1;
+  }
+  .safe:before{left:18px}
+  .safe:after{right:18px}
+
+  .status-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .attempts{
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    color:#f5f7f8;
+  }
+  .hint{
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  .main-grid{
+    display:grid;
+    grid-template-columns: 200px minmax(0,420px) 220px;
+    gap:18px;
+    align-items:start;
+  }
+
+  .symbol-panel{
+    position:sticky;
+    top:18px;
+    border:1px solid #404951;
+    border-radius:18px;
+    padding:14px;
+    background:linear-gradient(180deg,rgba(29,36,42,.96),rgba(13,18,21,.94));
+    box-shadow:inset 0 1px rgba(255,255,255,.04);
+  }
+
+  .symbol-panel h3{
+    margin:0 0 10px;
+    font-size:13px;
+    color:#cfd5da;
+    text-align:center;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+  }
+
+  .board{
+    display:grid;
+    gap:9px;
+  }
+  .row{
+    display:grid;
+    grid-template-columns: repeat(5, minmax(42px,68px));
+    gap:9px;
+    align-items:center;
+    min-height:62px;
+  }
+  .slot{
+    height:56px;
+    border-radius:11px;
+    display:grid;
+    place-items:center;
+    border:1px solid #424a51;
+    background:linear-gradient(180deg,#11161a,#090c0f);
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.85),0 1px rgba(255,255,255,.04);
+    font-size:30px;
+    user-select:none;
+  }
+  .row.current .slot{
+    border-color:#b78d3d;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.85), 0 0 0 1px rgba(213,170,77,.2), 0 0 18px rgba(213,170,77,.08);
+  }
+  .slot.status-ok{
+    background:linear-gradient(180deg,#2b7f53,#174b31);
+    border-color:#59d18b;
+    color:#fff;
+    box-shadow:inset 0 1px rgba(255,255,255,.12), 0 0 0 1px rgba(89,209,139,.15);
+  }
+  .slot.status-warn{
+    background:linear-gradient(180deg,#a86f22,#6c4515);
+    border-color:#e0a451;
+    color:#fff;
+    box-shadow:inset 0 1px rgba(255,255,255,.10), 0 0 0 1px rgba(224,164,81,.12);
+  }
+  .slot.status-bad{
+    background:linear-gradient(180deg,#8d3434,#552020);
+    border-color:#d45b5b;
+    color:#fff;
+    box-shadow:inset 0 1px rgba(255,255,255,.08), 0 0 0 1px rgba(212,91,91,.12);
+  }
+
+  .side{
+    border:1px solid #404951;
+    border-radius:18px;
+    padding:16px;
+    background:linear-gradient(180deg,rgba(29,36,42,.96),rgba(13,18,21,.94));
+    box-shadow:inset 0 1px rgba(255,255,255,.04);
+  }
+
+  .wheel{
+    width:160px;height:160px;margin:2px auto 18px;border-radius:50%;
+    position:relative;
+    background:
+      radial-gradient(circle,#12171b 0 22%,#5d666e 23% 25%,#1d2328 26% 39%,#889199 40% 43%,#272e34 44% 60%,#9aa2a9 61% 64%,#1a2025 65%);
+    box-shadow:inset 0 0 0 2px #0a0d0f,0 14px 30px rgba(0,0,0,.45);
+    transition:transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .wheel:before,.wheel:after{
+    content:"";position:absolute;background:#8f979e;border-radius:7px;box-shadow:0 2px 5px #000;
+  }
+  .wheel:before{width:76px;height:14px;left:42px;top:73px}
+  .wheel:after{width:14px;height:76px;left:73px;top:42px}
+  .wheel.open{transform:rotate(210deg)}
+
+  .legend{display:grid;gap:8px;font-size:12px;color:#c9d0d5}
+  .legend-item{display:flex;align-items:center;gap:8px;line-height:1.25}
+  .peg{
+    width:16px;
+    height:16px;
+    border-radius:4px;
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 1px 3px rgba(0,0,0,.6);
+    display:inline-block;
+    flex:0 0 auto;
+  }
+  .peg.ok{background:var(--ok)}
+  .peg.warn{background:var(--warn)}
+  .peg.bad{background:var(--bad)}
+
+  .symbols{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    margin-top:0;
+  }
+  .symbol-btn{
+    position:relative;
+    width:54px;
+    height:54px;
+    justify-self:center;
+    border-radius:12px;
+    border:1px solid #5d6871;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0)),
+      linear-gradient(#2d353d,#171d22);
+    color:#fff;
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    font-size:26px;
+    box-shadow:inset 0 1px rgba(255,255,255,.06),0 5px 12px rgba(0,0,0,.22);
+    transition:transform .12s ease, filter .12s ease, opacity .12s ease;
+  }
+  .symbol-btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.08)}
+  .symbol-btn:disabled{cursor:not-allowed}
+  .symbol-btn.used{
+    opacity:.34;
+    background:linear-gradient(#3c444b,#252c31);
+    border-color:#6b747b;
+    color:#d5dadd;
+    box-shadow:inset 0 1px rgba(255,255,255,.03);
+  }
+  .symbol-btn.eliminated{
+    position:relative;
+    opacity:.88;
+    background:linear-gradient(#7f3333,#4f1f1f);
+    border-color:#d75b5b;
+    color:#ffe1e1;
+    text-decoration:none;
+    box-shadow:inset 0 1px rgba(255,255,255,.05);
+  }
+  .symbol-btn.eliminated::after{
+    content:"";
+    position:absolute;
+    left:-4px;
+    top:24px;
+    width:62px;
+    height:5px;
+    background:rgba(255, 235, 235, .96);
+    border-radius:4px;
+    transform:rotate(-37deg);
+    box-shadow:0 0 4px rgba(0,0,0,.35);
+    pointer-events:none;
+  }
+
+  .controls{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+    margin-top:14px;
+  }
+  .controls .btn{
+    width:100%;
+    padding:10px 8px;
+  }
+
+  .message{
+    margin-top:12px;
+    min-height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    border-radius:12px;
+    border:1px solid #363e45;
+    background:#0b0f12;
+    color:#dfe4e7;
+    padding:12px;
+    font-weight:700;
+  }
+  .message.success{border-color:#2f7d56;color:#a8f0c7;background:#0d1c14}
+  .message.fail{border-color:#7a4242;color:#f0b1b1;background:#1d0e0e}
+
+  .overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.72);
+    display:none;align-items:center;justify-content:center;padding:24px;z-index:20;
+    backdrop-filter:blur(5px);
+  }
+  .overlay.show{display:flex}
+  .modal{
+    width:min(520px,100%);
+    border-radius:22px;
+    border:1px solid #69737b;
+    padding:28px;
+    background:linear-gradient(180deg,#22292f,#101519);
+    box-shadow:0 30px 90px #000;
+    text-align:center;
+  }
+  .modal .icon{font-size:56px}
+  .modal h2{font-size:30px;margin:12px 0 8px}
+  .modal p{color:#c5ccd1;line-height:1.5}
+  .code-reveal{
+    display:flex;justify-content:center;gap:8px;margin:18px 0; flex-wrap:wrap;
+  }
+  .code-reveal span{
+    width:48px;height:48px;display:grid;place-items:center;border-radius:10px;
+    background:#0c1013;border:1px solid #4d565e;font-size:27px;
+  }
+
+  .footer-note{
+    text-align:center;color:#7f8991;font-size:12px;margin-top:14px;
+  }
+
+  @media(max-width:900px){
+    .main-grid{grid-template-columns:188px minmax(0,1fr)}
+    .side{grid-column:1/-1;display:grid;grid-template-columns:120px 1fr;align-items:center;gap:12px}
+    .wheel{width:110px;height:110px;margin:0 auto}
+    .wheel:before{width:52px;height:11px;left:29px;top:49px}
+    .wheel:after{width:11px;height:52px;left:49px;top:29px}
+    .symbols{grid-template-columns:repeat(2,1fr)}
+    .symbol-panel{position:sticky;top:10px}
+  }
+
+  @media(max-width:650px){
+    .main-grid{grid-template-columns:1fr}
+    .symbol-panel{position:static}
+    .symbols{grid-template-columns:repeat(2,1fr)}
+    .side{display:block}
+    .wheel{width:110px;height:110px}
+    .row{grid-template-columns:repeat(5,minmax(36px,1fr));}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="title-wrap">
+      <div class="mini-dial" aria-hidden="true"></div>
+      <div>
+        <h1>LE MOSA'COFFRE</h1>
+        <div class="subtitle">Test de logique — trouvez la combinaison</div>
+      </div>
+    </div>
+    <button class="btn danger" id="nextCandidateTop">Candidat suivant</button>
+  </div>
+
+  <section class="safe">
+    <div class="status-row">
+      <div class="attempts" id="attemptText">Essai 1 / 10</div>
+      <div class="hint">5 symboles différents parmi 8 — aucun symbole ne peut être répété.</div>
+    </div>
+
+    <div class="main-grid">
+      <aside class="symbol-panel">
+        <h3>Symboles</h3>
+        <div class="symbols" id="symbols"></div>
+
+        <div class="controls">
+          <button class="btn success" id="validateBtn">Valider</button>
+          <button class="btn danger" id="clearBtn">Effacer</button>
+        </div>
+
+        <div class="message" id="message">
+          Sélectionnez 5 symboles différents puis validez.
+        </div>
+      </aside>
+
+      <div>
+        <div class="board" id="board"></div>
+      </div>
+
+      <aside class="side">
+        <div class="wheel" id="wheel" aria-hidden="true"></div>
+        <div class="legend">
+          <div class="legend-item"><span class="peg ok"></span> Bon symbole, bonne position</div>
+          <div class="legend-item"><span class="peg warn"></span> Bon symbole, mauvaise position</div>
+          <div class="legend-item"><span class="peg bad"></span> Symbole absent du code</div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <div class="footer-note">
+    Fonctionne hors ligne. Le bouton « Candidat suivant » efface la partie et génère une nouvelle combinaison.
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="icon" id="modalIcon">🔓</div>
+    <h2 id="modalTitle">Coffre ouvert</h2>
+    <p id="modalText"></p>
+    <div class="code-reveal" id="codeReveal"></div>
+    <button class="btn primary" id="nextCandidateModal">Candidat suivant</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const SYMBOLS = ["◆","●","▲","★","✦","⬟","■","☾"];
+  const CODE_LENGTH = 5;
+  const MAX_ATTEMPTS = 10;
+
+  let secret = [];
+  let currentGuess = [];
+  let attempts = [];
+  let eliminatedSymbols = new Set();
+  let gameOver = false;
+
+  const board = document.getElementById("board");
+  const symbolsWrap = document.getElementById("symbols");
+  const message = document.getElementById("message");
+  const attemptText = document.getElementById("attemptText");
+  const wheel = document.getElementById("wheel");
+  const overlay = document.getElementById("overlay");
+  const modalIcon = document.getElementById("modalIcon");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalText = document.getElementById("modalText");
+  const codeReveal = document.getElementById("codeReveal");
+
+  function shuffled(arr){
+    const a = [...arr];
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+
+  function newSecret(){
+    return shuffled(SYMBOLS).slice(0,CODE_LENGTH);
+  }
+
+  function startGame(){
+    secret = newSecret();
+    currentGuess = [];
+    attempts = [];
+    eliminatedSymbols = new Set();
+    gameOver = false;
+    wheel.classList.remove("open");
+    overlay.classList.remove("show");
+    message.className = "message";
+    message.textContent = "Sélectionnez 5 symboles différents puis validez.";
+    render();
+  }
+
+  function scoreGuess(guess){
+    let correct = 0;
+    let misplaced = 0;
+    const statuses = guess.map((s, i) => {
+      if(secret[i] === s){
+        correct++;
+        return "ok";
+      }
+      if(secret.includes(s)){
+        misplaced++;
+        return "warn";
+      }
+      return "bad";
+    });
+
+    return {
+      correct,
+      misplaced,
+      absent: CODE_LENGTH-correct-misplaced,
+      statuses
+    };
+  }
+
+  function renderBoard(){
+    board.innerHTML = "";
+    for(let r=0;r<MAX_ATTEMPTS;r++){
+      const row = document.createElement("div");
+      row.className = "row";
+      if(r === attempts.length && !gameOver) row.classList.add("current");
+
+      const completed = r < attempts.length;
+      const guess = completed ? attempts[r].guess : (r === attempts.length ? currentGuess : []);
+      const statuses = completed ? attempts[r].score.statuses : [];
+
+      for(let c=0;c<CODE_LENGTH;c++){
+        const slot = document.createElement("div");
+        slot.className = "slot";
+        if(completed && statuses[c]) slot.classList.add("status-" + statuses[c]);
+        slot.textContent = guess[c] || "";
+        row.appendChild(slot);
+      }
+      board.appendChild(row);
+    }
+  }
+
+  function renderSymbols(){
+    symbolsWrap.innerHTML = "";
+    SYMBOLS.forEach(s=>{
+      const b = document.createElement("button");
+      b.className = "symbol-btn";
+      b.textContent = s;
+      const eliminated = eliminatedSymbols.has(s);
+      const used = currentGuess.includes(s);
+      if(eliminated) b.classList.add("eliminated");
+      else if(used) b.classList.add("used");
+      b.disabled = gameOver || eliminated || used || currentGuess.length >= CODE_LENGTH;
+
+      b.addEventListener("click", ()=>{
+        if(gameOver || eliminatedSymbols.has(s) || currentGuess.includes(s) || currentGuess.length >= CODE_LENGTH) return;
+        currentGuess.push(s);
+        message.className = "message";
+        message.textContent = currentGuess.length === CODE_LENGTH
+          ? "Combinaison complète. Vous pouvez valider."
+          : `Encore ${CODE_LENGTH-currentGuess.length} symbole${CODE_LENGTH-currentGuess.length>1?"s":""}.`;
+        render();
+      });
+      symbolsWrap.appendChild(b);
+    });
+  }
+
+  function render(){
+    renderBoard();
+    renderSymbols();
+    const n = Math.min(attempts.length + 1, MAX_ATTEMPTS);
+    attemptText.textContent = gameOver ? `Partie terminée — ${attempts.length} essai${attempts.length>1?"s":""}` : `Essai ${n} / ${MAX_ATTEMPTS}`;
+  }
+
+  function revealCode(){
+    codeReveal.innerHTML = "";
+    secret.forEach(s=>{
+      const span = document.createElement("span");
+      span.textContent = s;
+      codeReveal.appendChild(span);
+    });
+  }
+
+  function finish(win){
+    gameOver = true;
+    revealCode();
+    if(win){
+      wheel.classList.add("open");
+      modalIcon.textContent = "🔓";
+      modalTitle.textContent = "Coffre ouvert";
+      modalText.textContent = `Combinaison trouvée en ${attempts.length} essai${attempts.length>1?"s":""}.`;
+      message.className = "message success";
+      message.textContent = "Accès autorisé — coffre ouvert.";
+    }else{
+      modalIcon.textContent = "🔒";
+      modalTitle.textContent = "Coffre verrouillé";
+      modalText.textContent = "Les 10 essais ont été utilisés. La combinaison était :";
+      message.className = "message fail";
+      message.textContent = "Échec — les 10 essais ont été utilisés.";
+    }
+    setTimeout(()=>overlay.classList.add("show"), 380);
+    render();
+  }
+
+  function validate(){
+    if(gameOver) return;
+    if(currentGuess.length !== CODE_LENGTH){
+      message.className = "message fail";
+      message.textContent = "Il faut sélectionner exactement 5 symboles différents.";
+      return;
+    }
+
+    const score = scoreGuess(currentGuess);
+
+    currentGuess.forEach(s => {
+      if(!secret.includes(s)) eliminatedSymbols.add(s);
+    });
+
+    attempts.push({guess:[...currentGuess], score});
+    const win = score.correct === CODE_LENGTH;
+    currentGuess = [];
+
+    if(win) finish(true);
+    else if(attempts.length >= MAX_ATTEMPTS) finish(false);
+    else{
+      message.className = "message";
+      message.textContent = `${score.correct} bien placé${score.correct!==1?"s":""}, ${score.misplaced} mal placé${score.misplaced!==1?"s":""}.`;
+      render();
+    }
+  }
+
+  document.getElementById("validateBtn").addEventListener("click", validate);
+  document.getElementById("clearBtn").addEventListener("click", ()=>{
+    if(gameOver) return;
+    currentGuess = [];
+    message.className = "message";
+    message.textContent = "Sélection effacée.";
+    render();
+  });
+  document.getElementById("nextCandidateTop").addEventListener("click", startGame);
+  document.getElementById("nextCandidateModal").addEventListener("click", startGame);
+
+  window.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter") validate();
+    if(e.key === "Escape" && !gameOver){
+      currentGuess = [];
+      render();
+    }
+    if(e.key === "Backspace" && !gameOver && currentGuess.length){
+      e.preventDefault();
+      currentGuess.pop();
+      render();
+    }
+  });
+
+  startGame();
+})();
+</script>
+</body>
+</html>
