@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090d12">
-<title>Mosa'Coffre — V3</title>
+<title>Mosa'Coffre — V3.1</title>
 <style>
 :root{
   --bg:#0f1822;
@@ -597,7 +597,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
   text-transform:uppercase;
   letter-spacing:.025em;
   background:
-    linear-gradient(180deg,#5be090 0%,#35b96f 46%,#1f8a50 100%);  box-shadow:
+    linear-gradient(180deg,#5be090 0%,#35b96f 46%,#1f8a50 100%);
+  box-shadow:
     0 7px 0 #145f38,
     0 10px 18px rgba(0,0,0,.38),
     inset 0 2px 0 rgba(255,255,255,.34),
@@ -867,13 +868,14 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
   margin-bottom:10px;
 }
 .result-copy h2{margin-bottom:4px}
+.result-copy.final-open{margin-bottom:4px}
 .result-copy .result-score{margin:2px 0 4px}
 .result-vault{margin-top:10px!important;margin-bottom:50px!important}
 .result-actions{
   position:relative;
-  z-index:8;
+  z-index:9;
   width:min(430px,84vw);
-  margin:-6px auto 8px!important;
+  margin:2px auto 8px!important;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -995,8 +997,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
   --symbol-color:#6c7882;
   background:linear-gradient(#111820,#090e12);
   border-color:#697783;
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.03);
-}
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.03);}
 .final-code-chip.spinning{
   animation:reelPulse .11s linear infinite;
 }
@@ -1197,19 +1198,20 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     opacity:1;
   }
 }
+
 .score-burst{
   position:absolute;
   left:50%;
-  top:58%;
+  top:57%;
   transform:translate(-50%,10px) scale(.6);
   opacity:0;
   z-index:8;
-  padding:10px 18px;
+  padding:14px 28px;
   border-radius:999px;
-  border:2px solid rgba(255,223,142,.8);
-  background:linear-gradient(180deg,rgba(255,221,131,.96),rgba(224,168,59,.98));
+  border:2px solid rgba(255,223,142,.86);
+  background:linear-gradient(180deg,rgba(255,221,131,.98),rgba(224,168,59,1));
   color:#2d1a02;
-  font-size:28px;
+  font-size:34px;
   font-weight:1000;
   white-space:nowrap;
   text-shadow:0 1px rgba(255,255,255,.38);
@@ -1289,7 +1291,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
 @media (max-width:760px){
   .result-actions{
     width:100%;
-    margin-top:8px!important;
+    margin:4px auto 10px!important;
     justify-content:center;
     gap:8px;
   }
@@ -1403,7 +1405,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     <div class="home-shell">
       <div class="home-art" aria-hidden="true"></div>
       <div class="home-top">
-        <div class="version-badge">MOSA'COFFRE · V3</div>
+        <div class="version-badge">MOSA'COFFRE · V3.1</div>
         <div class="home-actions">
           <button class="btn ghost small" id="rulesBtn">Règles</button>
           <button class="btn ghost small" id="fullscreenBtn">⛶</button>
@@ -1578,11 +1580,16 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
 
 <div class="modal-backdrop" id="chestResultModal">
   <div class="modal result-scene">
-    <div class="result-copy">
+    <div class="result-copy" id="resultCopy">
       <h2 id="chestResultTitle">Sécurité franchie !</h2>
       <div class="result-score" id="chestResultScore">+ 1 000 points</div>
       <div class="result-details" id="chestResultDetails"></div>
       <div class="secret-reveal" id="secretReveal"></div>
+    </div>
+    <div class="modal-actions result-actions">
+      <button class="btn primary" id="nextChestBtn">Sécurité suivante</button>
+      <button class="btn" id="resultReplayBtn" hidden>Rejouer</button>
+      <button class="btn primary" id="resultHomeBtn" hidden>Accueil</button>
     </div>
     <div class="result-vault" id="resultVault">
       <div class="vault-depth vault-side-left"></div>
@@ -1596,11 +1603,6 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
       <div class="coin-pile" id="coinPile"></div>
       <div class="spark-layer" id="sparkLayer"></div>
       <div class="score-burst" id="scoreBurst"></div>
-    </div>
-    <div class="modal-actions result-actions">
-      <button class="btn primary" id="nextChestBtn">Sécurité suivante</button>
-      <button class="btn" id="resultReplayBtn" hidden>Rejouer</button>
-      <button class="btn primary" id="resultHomeBtn" hidden>Accueil</button>
     </div>
   </div>
 </div>
@@ -1795,7 +1797,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
       chestIndex:0,score:0,opened:0,outcomes:[],
       secret:[],guesses:[],current:[],absent:new Set(),finishedChest:false,saved:false
     };
-    resetLocks();    $("boardStage")?.classList.remove("door-opening");
+    resetLocks();
+    $("boardStage")?.classList.remove("door-opening");
     renderSeriesIcons();
     startChest();
     showScreen("gameScreen");
@@ -1993,8 +1996,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     return best;
   }
 
-  function startSymbolDrag(e,index,btn){
-    const L=LEVELS[state.levelKey];
+  function startSymbolDrag(e,index,btn){    const L=LEVELS[state.levelKey];
     if(e.button!==undefined && e.button!==0) return;
     if(state.finishedChest || state.current.includes(index) || state.absent.has(index) || currentCount()>=L.length) return;
 
@@ -2318,7 +2320,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     $("chestResultScore").style.color=success?"#ffd678":"#ef7c82";
     $("chestResultDetails").textContent=success
       ? (isDoorStep
-          ? `Le coffre s'ouvre en ${attempt} essai${attempt>1?"s":""} sur cette sécurité.`
+          ? ""
           : `Sécurité franchie en ${attempt} essai${attempt>1?"s":""}.`)
       : `Les ${L.attempts} essais ont été utilisés. La combinaison était :`;
 
@@ -2332,8 +2334,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     $("nextChestBtn").textContent="Sécurité suivante";
 
     if(last){
-      $("chestResultDetails").textContent =
-        `${state.opened}/${state.totalChests} sécurité${state.totalChests>1?"s":""} franchie${state.opened>1?"s":""}.`;
+      $("chestResultDetails").textContent = "";
       saveSeriesResult();
     }
 
@@ -2394,7 +2395,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     if($("finalCodeStrip")) $("finalCodeStrip").innerHTML="";
   }
 
-  function renderFinalCode(){    const strip=$("finalCodeStrip");
+  function renderFinalCode(){
+    const strip=$("finalCodeStrip");
     if(!strip) return;
 
     strip.innerHTML=state.secret.map((_,idx)=>
