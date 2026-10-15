@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090d12">
-<title>Mosa'Coffre — V3.2</title>
+<title>Mosa'Coffre — V3.3</title>
 <style>
 :root{
   --bg:#0f1822;
@@ -870,7 +870,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
 .result-copy h2{margin-bottom:2px}
 .result-copy.final-open{margin-bottom:4px}
 .result-copy .result-score{margin:2px 0 4px}
-.result-vault{margin-top:10px!important;margin-bottom:50px!important}
+.result-vault{margin-top:10px!important;margin-bottom:112px!important}
 .result-actions{
   position:relative;
   z-index:9;
@@ -1066,7 +1066,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
 .coin-pile{
   position:absolute;
   left:50%;
-  bottom:2px;
+  bottom:-88px;
   width:calc(var(--pile-w, 62) * 1%);
   height:var(--pile-h, 52px);
   transform:translateX(-50%);
@@ -1405,7 +1405,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     <div class="home-shell">
       <div class="home-art" aria-hidden="true"></div>
       <div class="home-top">
-        <div class="version-badge">MOSA'COFFRE · V3.2</div>
+        <div class="version-badge">MOSA'COFFRE · V3.3</div>
         <div class="home-actions">
           <button class="btn ghost small" id="rulesBtn">Règles</button>
           <button class="btn ghost small" id="fullscreenBtn">⛶</button>
@@ -2478,15 +2478,15 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     // Bigger score => more coins and a bigger heap in front of the vault.
     const maxPossible = LEVELS[state.levelKey].maxPoints * state.totalChests;
     const ratio = Math.max(0, Math.min(1, totalScore / Math.max(1, maxPossible)));
-    const coinCount = Math.round(18 + ratio * 34);  // 18 -> 52 coins
+    const coinCount = Math.round((18 + ratio * 34) * 1.20);  // ~22 -> 62 coins
 
-    const pileHeight = 34 + ratio * 46; // 34px -> 80px
-    const pileWidth = 52 + ratio * 28;  // 52% -> 80%
+    const pileHeight = (34 + ratio * 46) * 1.20; // ~41px -> 96px
+    const pileWidth = (52 + ratio * 28) * 1.20;  // ~62% -> 96%
     pile.style.setProperty("--pile-h", `${pileHeight.toFixed(1)}px`);
     pile.style.setProperty("--pile-w", `${pileWidth.toFixed(1)}`);
 
-    const spread = 70 + ratio * 72;
-    const crest = 8 + ratio * 20;
+    const spread = (70 + ratio * 72) * 1.20;
+    const crest = (8 + ratio * 20) * 1.20;
 
     for(let i=0;i<coinCount;i++){
       const coin=document.createElement("i");
@@ -2499,7 +2499,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
       const baseLift = 8 + Math.random()*10;
       const ty = -(baseLift + moundLift);
 
-      const size = 16 + Math.random()*12;
+      const size = (16 + Math.random()*12) * 1.20;
       const delay = (3.35 + Math.random()*0.20).toFixed(2) + "s";
       const dur = (0.92 + Math.random()*0.16).toFixed(2) + "s";
       const rot2 = Math.round(-420 + Math.random()*840) + "deg";
