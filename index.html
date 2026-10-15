@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090d12">
-<title>Mosa'Coffre — V3.1</title>
+<title>Mosa'Coffre — V3.2</title>
 <style>
 :root{
   --bg:#0f1822;
@@ -860,14 +860,14 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
 .result-scene{
   text-align:center;
   overflow:hidden;
-  padding-bottom:14px;
+  padding-bottom:24px;
 }
 .result-copy{
   position:relative;
   z-index:8;
-  margin-bottom:10px;
+  margin-bottom:4px;
 }
-.result-copy h2{margin-bottom:4px}
+.result-copy h2{margin-bottom:2px}
 .result-copy.final-open{margin-bottom:4px}
 .result-copy .result-score{margin:2px 0 4px}
 .result-vault{margin-top:10px!important;margin-bottom:50px!important}
@@ -875,7 +875,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
   position:relative;
   z-index:9;
   width:min(430px,84vw);
-  margin:2px auto 8px!important;
+  margin:-2px auto 6px!important;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -1066,7 +1066,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
 .coin-pile{
   position:absolute;
   left:50%;
-  bottom:-34px;
+  bottom:2px;
   width:calc(var(--pile-w, 62) * 1%);
   height:var(--pile-h, 52px);
   transform:translateX(-50%);
@@ -1405,7 +1405,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
     <div class="home-shell">
       <div class="home-art" aria-hidden="true"></div>
       <div class="home-top">
-        <div class="version-badge">MOSA'COFFRE · V3.1</div>
+        <div class="version-badge">MOSA'COFFRE · V3.2</div>
         <div class="home-actions">
           <button class="btn ghost small" id="rulesBtn">Règles</button>
           <button class="btn ghost small" id="fullscreenBtn">⛶</button>
@@ -2316,6 +2316,7 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
       ? (isDoorStep ? "Coffre ouvert !" : "Sécurité franchie !")
       : "Sécurité bloquée";
     $("chestResultTitle").style.color=success?"#f5e1aa":"#ef7c82";
+    $("chestResultScore").hidden = Boolean(success && isDoorStep);
     $("chestResultScore").textContent=success?`+ ${formatScore(points)} points`:"0 point";
     $("chestResultScore").style.color=success?"#ffd678":"#ef7c82";
     $("chestResultDetails").textContent=success
@@ -2495,8 +2496,8 @@ button:focus-visible,input:focus-visible{outline:3px solid rgba(77,161,255,.8);o
       // Forme de tas : plus haut vers le centre.
       const normalized = Math.min(1, Math.abs(tx)/spread);
       const moundLift = (1-normalized) * pileHeight * (0.55 + Math.random()*0.28);
-      const baseY = 22 + ratio*10 + Math.random()*12;
-      const ty = Math.max(4, pileHeight - moundLift + baseY - crest);
+      const baseLift = 8 + Math.random()*10;
+      const ty = -(baseLift + moundLift);
 
       const size = 16 + Math.random()*12;
       const delay = (3.35 + Math.random()*0.20).toFixed(2) + "s";
